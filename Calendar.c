@@ -48,38 +48,44 @@ bool canout(int year, int month, int day)
 
 void printyear(int year)
 {
+    int N;
+    printf("Column in each line: ");
+    scanf("%d", &N);
     printf("The calendar of the year %d.\n",year);
+
     const char month_name[12][14] = { "January 1","February 2","March 3","April 4","May 5","June 6","July 7","Augest 8","Septemper 9","October 10","November 11","December 12" };
-    for (int i=1; i<=6; i++) {
-        printf("%-30s%s\n", month_name[2*i-2], month_name[2*i-1]);
-        printf("===========================   ===========================\n");
-        printf("Sun Mon Tue Wed Thu Fri Sat   Sun Mon Tue Wed Thu Fri Sat\n");
-        int tmp1=1, tmp2=1;
-        tmp1-=getmonthbeginweek(year, 2*i-1);   //左边的日历要输出的日期
-        tmp2-=getmonthbeginweek(year, 2*i);     //右边的日历要输出的日期
+    for (int i=1; i<=12/N; i++) {
+        for (int j=0; j<N; j++)
+            printf("%-30s", month_name[i*N-N+j]);
+        printf("\n");
+
+        for (int j=0; j<N; j++)
+            printf("===========================   ");
+        printf("\n");
+        for (int j=0; j<N; j++)
+            printf("Sun Mon Tue Wed Thu Fri Sat   ");
+        printf("\n");
+
+        int day[12] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+        for (int j=0; j<N; j++)
+            day[j]-=getmonthbeginweek(year, N*i-N+1+j);
         printf("\n");
         for (int j=0; j<6; j++) {
-            //处理左边那一列
-            for (int k=0; k<7; k++) {
-                if (canout(year, 2*i-1, tmp1))
-                    printf("%3d", tmp1);
-                else
-                    printf("   ");
-                printf(" ");
-                tmp1++;
-            }
-            printf("  ");
-            //处理右边那一列
-            for (int k=0; k<7; k++) {
-                if (canout(year, 2*i, tmp2))
-                    printf("%3d", tmp2);
-                else
-                    printf("   ");
-                printf(" ");
-                tmp2++;
+            for (int k=0; k<N; k++) {
+                for (int l=0; l<7; l++) {
+                    if (canout(year, N*i-N+1+k, day[k]))
+                        printf("%3d", day[k]);
+                    else 
+                        printf("   ");
+                    printf(" ");
+                    day[k]++;
+                }
+                printf("  ");
             }
             printf("\n");
+
         }
+        printf("\n");
     }
 }
 
